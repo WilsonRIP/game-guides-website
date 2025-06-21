@@ -5,33 +5,61 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { notFound } from 'next/navigation';
-import { games } from '@/lib/data/games';
-import { MISSIONS } from '@/lib/data/hitman3';
+import { getGameBySlug } from '@/lib/sanity/client';
+import { Game, Mission } from '@/lib/sanity/types';
 import Link from 'next/link';
 import { ChevronRight, Clock, Target, Trophy, MapPin, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeInUp, cardHoverEffect } from '@/lib/animations';
 
 interface GameGuidePageProps {
-  params: {
+  params: Promise<{
     game: string;
-  };
+  }>;
 }
 
 const GameGuidePage = ({ params }: GameGuidePageProps) => {
-  const { game } = params;
+  const { game } = React.use(params);
+  const [gameData, setGameData] = React.useState<Game | null>(null);
+  const [loading, setLoading] = React.useState(true);
 
-  const gameData = games.find((g) => g.id === game);
+  React.useEffect(() => {
+    async function fetchGameData() {
+      try {
+        const data = await getGameBySlug(game);
+        if (!data) {
+          notFound();
+        }
+        setGameData(data);
+      } catch (error) {
+        console.error('Error fetching game data:', error);
+        notFound();
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchGameData();
+  }, [game]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-12 md:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading game data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!gameData) {
     notFound();
   }
 
-  // NOTE: The data in `hitman3.ts` is currently for Hitman 1 (Paris, Sapienza).
-  // This page is set up to display it when viewing the 'hitman-3' guide path for demonstration.
-  // You can add more games to `games.ts` and more mission data to `hitman3.ts`
-  // and implement a switch or a more dynamic loader here.
-  const missionsToShow = game === 'hitman-3' ? MISSIONS : [];
+  const missionsToShow = gameData.missions || [];
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -87,7 +115,7 @@ const GameGuidePage = ({ params }: GameGuidePageProps) => {
               </Card>
               <Card className="text-center">
                 <CardContent className="pt-6">
-                  <div className="text-2xl font-bold">{missionsToShow.reduce((acc, mission) => acc + mission.targets.length, 0)}</div>
+                  <div className="text-2xl font-bold">{missionsToShow.reduce((acc: number, mission: Mission) => acc + (mission.targets?.length || 0), 0)}</div>
                   <div className="text-sm text-muted-foreground">Targets</div>
                 </CardContent>
               </Card>
@@ -138,9 +166,9 @@ const GameGuidePage = ({ params }: GameGuidePageProps) => {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8"
             variants={staggerContainer(0.1)}
           >
-            {missionsToShow.map((mission, index) => (
+            {missionsToShow.map((mission: Mission, index: number) => (
               <motion.div
-                key={mission.id}
+                key={mission._id}
                 variants={fadeInUp}
                 whileHover={cardHoverEffect}
               >
@@ -172,11 +200,11 @@ const GameGuidePage = ({ params }: GameGuidePageProps) => {
                     <div className="mb-6">
                       <h4 className="font-semibold mb-3 flex items-center gap-2">
                         <Target className="h-4 w-4 text-primary" />
-                        Targets ({mission.targets.length})
+                        Targets ({mission.targets?.length || 0})
                       </h4>
                       <div className="space-y-3">
-                        {mission.targets.map(target => (
-                          <div key={target.id} className="p-3 rounded-lg bg-muted/50 border">
+                        {mission.targets?.map((target) => (
+                          <div key={target._id} className="p-3 rounded-lg bg-muted/50 border">
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
                                 <p className="font-medium">{target.name}</p>
@@ -189,22 +217,22 @@ const GameGuidePage = ({ params }: GameGuidePageProps) => {
                               </div>
                             </div>
                           </div>
-                        ))}
+                        )) || <div className="text-sm text-muted-foreground">No targets available</div>}
                       </div>
                     </div>
 
                     {/* Mission Stats */}
                     <div className="grid grid-cols-3 gap-4 text-center border-t pt-4">
                       <div>
-                        <div className="text-lg font-semibold">{mission.disguises.length}</div>
+                        <div className="text-lg font-semibold">{mission.disguises?.length || 0}</div>
                         <div className="text-xs text-muted-foreground">Disguises</div>
                       </div>
                       <div>
-                        <div className="text-lg font-semibold">{mission.opportunities.length}</div>
+                        <div className="text-lg font-semibold">{mission.opportunities?.length || 0}</div>
                         <div className="text-xs text-muted-foreground">Opportunities</div>
                       </div>
                       <div>
-                        <div className="text-lg font-semibold">{mission.challenges.length}</div>
+                        <div className="text-lg font-semibold">{mission.challenges?.length || 0}</div>
                         <div className="text-xs text-muted-foreground">Challenges</div>
                       </div>
                     </div>

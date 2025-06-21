@@ -3,17 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   env: {
-    CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID || '',
-    CONTENTFUL_ACCESS_TOKEN: process.env.CONTENTFUL_ACCESS_TOKEN || '',
-    CONTENTFUL_PREVIEW_ACCESS_TOKEN: process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN || '',
-    CONTENTFUL_ENVIRONMENT: process.env.CONTENTFUL_ENVIRONMENT || 'master'
+    // Sanity Configuration
+    NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
+    NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    SANITY_API_TOKEN: process.env.SANITY_API_TOKEN || '',
   },
   images: {
-    domains: ['images.ctfassets.net'], // Allow Contentful images
+    domains: ['cdn.sanity.io'], // Allow Sanity images
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.ctfassets.net',
+        hostname: 'cdn.sanity.io',
         pathname: '/**',
       },
     ],
