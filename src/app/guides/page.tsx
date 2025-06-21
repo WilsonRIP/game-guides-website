@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Search, GamepadIcon, Users, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, cardHoverEffect } from '@/lib/animations';
+import Image from 'next/image';
 
 const GuidesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -116,9 +117,11 @@ const GuidesPage = () => {
                       {/* Game Image */}
                       <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 relative overflow-hidden">
                         {game.coverImage ? (
-                          <img 
+                          <Image 
                             src={urlFor(game.coverImage).width(400).height(200).url()} 
                             alt={game.name}
+                            width={400}
+                            height={200}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
@@ -175,9 +178,9 @@ const GuidesPage = () => {
         className="mt-20 p-8 rounded-2xl bg-gradient-to-r from-primary/5 to-secondary/5 border"
       >
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Can't find what you're looking for?</h2>
+          <h2 className="text-2xl font-bold mb-4">Can&apos;t find what you&apos;re looking for?</h2>
           <p className="text-muted-foreground mb-6">
-            We're constantly adding new guides. Request a guide for your favorite game!
+            We&apos;re constantly adding new guides. Request a guide for your favorite game!
           </p>
           <Badge variant="secondary" className="text-sm px-4 py-2">
             More guides coming soon

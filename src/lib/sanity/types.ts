@@ -132,7 +132,7 @@ export interface Opportunity {
   requiredItems?: string[]
   requiredDisguise?: string
   difficulty: 'Easy' | 'Medium' | 'Hard'
-  detailedWalkthrough?: any[] // Portable Text
+  detailedWalkthrough?: PortableTextContent
   mission?: SanityReference
 }
 
@@ -145,7 +145,7 @@ export interface Challenge {
   type: 'Assassination' | 'Discovery' | 'Feats' | 'Targets' | 'Classics'
   xpReward: number
   requirements?: string[]
-  tips?: any[] // Portable Text
+  tips?: PortableTextContent
   mission?: SanityReference
 }
 
@@ -186,8 +186,8 @@ export interface Mission {
   challenges?: Challenge[]
   masteryUnlocks?: MasteryUnlock[]
   startingLocations?: StartingLocation[]
-  tips?: any[] // Portable Text
-  walkthrough?: any[] // Portable Text
+  tips?: PortableTextContent
+  walkthrough?: PortableTextContent
 }
 
 export interface VideoEmbed {
@@ -206,7 +206,7 @@ export interface Guide {
   game?: Game
   mission?: Mission
   author?: Author
-  content?: any[] // Portable Text with images and videos
+  content?: PortableTextContent
   tags?: string[]
   difficulty?: 'beginner' | 'intermediate' | 'advanced' | 'expert'
   estimatedTime?: string
@@ -237,7 +237,7 @@ export interface PortableTextBlock {
   markDefs?: Array<{
     _type: string
     _key: string
-    [key: string]: any
+    [key: string]: unknown
   }>
 }
 

@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/animations';
 import { getFeaturedContent, urlFor } from '@/lib/sanity/client';
 import { FeaturedContent, Game, Guide } from '@/lib/sanity/types';
+import Image from 'next/image';
 
 const HomePage = () => {
   const [featuredContent, setFeaturedContent] = React.useState<FeaturedContent | null>(null);
@@ -122,9 +123,11 @@ const HomePage = () => {
                     <Card className="h-full hover:border-primary/50 transition-all duration-300 hover:shadow-lg group cursor-pointer">
                       {game.coverImage && (
                         <div className="aspect-video overflow-hidden rounded-t-lg">
-                          <img 
+                          <Image 
                             src={urlFor(game.coverImage).width(400).height(200).url()} 
                             alt={game.name}
+                            width={400}
+                            height={200}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
@@ -223,9 +226,11 @@ const HomePage = () => {
                     <Card className="h-full hover:border-primary/50 transition-all duration-300 hover:shadow-lg group cursor-pointer">
                       {guide.coverImage && (
                         <div className="aspect-video overflow-hidden rounded-t-lg">
-                          <img 
+                          <Image 
                             src={urlFor(guide.coverImage).width(400).height(200).url()} 
                             alt={guide.title}
+                            width={400}
+                            height={200}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
