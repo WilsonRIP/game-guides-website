@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { notFound } from 'next/navigation';
@@ -60,15 +60,6 @@ const GameGuidePage = ({ params }: GameGuidePageProps) => {
   }
 
   const missionsToShow = gameData.missions || [];
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Novice': return 'bg-green-500';
-      case 'Professional': return 'bg-yellow-500';
-      case 'Master': return 'bg-red-500';
-      default: return 'bg-gray-500';
-    }
-  };
 
   const getDifficultyBadgeVariant = (difficulty: string) => {
     switch (difficulty) {
@@ -250,7 +241,7 @@ const GameGuidePage = ({ params }: GameGuidePageProps) => {
             </div>
             <h2 className="text-2xl font-semibold mb-4">Coming Soon!</h2>
             <p className="text-muted-foreground mb-6">
-              We're working hard to bring you comprehensive guides for {gameData.name}. 
+              We&apos;re working hard to bring you comprehensive guides for {gameData.name}. 
               Check back soon for detailed walkthroughs and strategies.
             </p>
             <Badge variant="secondary" className="text-sm px-4 py-2">
